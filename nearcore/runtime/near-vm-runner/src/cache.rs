@@ -103,7 +103,8 @@ pub fn precompile_contract(
     cache: Option<&dyn CompiledContractCache>,
 ) -> Result<Result<ContractPrecompilatonResult, CompilationError>, CacheError> {
     let _span = tracing::debug_span!(target: "vm", "precompile_contract").entered();
-    let vm_kind = VMKind::for_protocol_version(current_protocol_version);
+    let mut vm_kind = VMKind::for_protocol_version(current_protocol_version);
+    vm_kind = VMKind::NearVm;
     let runtime = vm_kind
         .runtime(config.clone())
         .unwrap_or_else(|| panic!("the {vm_kind:?} runtime has not been enabled at compile time"));
